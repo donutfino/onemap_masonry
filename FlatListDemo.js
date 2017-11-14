@@ -223,7 +223,7 @@ class FlatListDemo extends Component {
       </View>
     );
   };
-  //          onEndReached={this.handleLoadMore}:)
+  //         
   render() {
     return (
       <View style={{flexGrow:1, backgroundColor:'white'}}>
@@ -240,6 +240,7 @@ class FlatListDemo extends Component {
             onEndReachedThreshold={5}
             getHeightForItem={({ item }) => item.height + 2}
             numColumns={3}
+            onEndReached={this.handleLoadMore}:)
           />
         </List>
       
