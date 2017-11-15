@@ -162,6 +162,8 @@ class FlatListDemo extends Component {
     this.makeRemoteRequest();
   }
   makeRemoteRequest = () => {
+    console.log('Remote API Called!')
+
     this.setState({ loading: true });
 
     var appendedData = deepcopy(testdata);
