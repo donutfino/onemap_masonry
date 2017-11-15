@@ -7,9 +7,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import _ from 'lodash';
 const uuidv4 = require('uuid/v4');
 const { height, width } = Dimensions.get('window');
+var deepcopy = require("deepcopy");
 
 // list of images
-let data = [
+const testdata = [
   {
     uri: 'https://s-media-cache-ak0.pinimg.com/736x/b1/21/df/b121df29b41b771d6610dba71834e512.jpg',
     caption:"this is test",
@@ -111,6 +112,7 @@ const generateKey = (pre) => {
 class Cell extends PureComponent {
   componentDidMount() {
     //console.warn('mount cell');
+    
   }
 
   componentWillUnmount() {
@@ -154,12 +156,15 @@ class FlatListDemo extends Component {
       error: null,
       refreshing: false
     };
+    makeRemoteRequest = this.makeRemoteRequest.bind(this);
   }
   componentDidMount() {
     this.makeRemoteRequest();
   }
   makeRemoteRequest = () => {
-    const appendedData = [...data, ...addData];    
+    this.setState({ loading: true });
+   
+    var appendedData = deepcopy(testdata);
     _.map(appendedData, function(e, i) {
       height = Math.round(Math.random() * 100 + 100);      
       // Image.getSize(e.uri, (width, height) => {
@@ -168,15 +173,14 @@ class FlatListDemo extends Component {
       return _.extend(e, {index: uuidv4(),height: height});
       //generate unique key, it is necessary to test only.
     });
-    this.setState({ loading: true });
-    setTimeout(() => {
+    //setTimeout(() => {
       this.setState({     
         loading: false,
         refreshing: false,
         //data: appendedData
        data: [...this.state.data, ...appendedData]        
        });
-    }, 2000);  
+    //}, 2000);  
   };
   handleRefresh = () => {
     this.setState(
@@ -223,7 +227,7 @@ class FlatListDemo extends Component {
       </View>
     );
   };
-  //         
+  //          onEndReached={this.handleLoadMore}:)
   render() {
     return (
       <View style={{flexGrow:1, backgroundColor:'white'}}>
@@ -237,10 +241,10 @@ class FlatListDemo extends Component {
             ItemSeparatorComponent={this.renderSeparator}       
             onRefresh={this.handleRefresh}
             refreshing={this.state.refreshing}
-            onEndReachedThreshold={5}
+            onEndReachedThreshold={2}
             getHeightForItem={({ item }) => item.height + 2}
+            onEndReached={this.handleLoadMore}
             numColumns={3}
-            onEndReached={this.handleLoadMore}:)
           />
         </List>
       
